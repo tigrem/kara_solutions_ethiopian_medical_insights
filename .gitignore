@@ -1,11 +1,7 @@
-# Create the .gitignore file
-cat <<EOF > .gitignore
 .env
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-data/raw/ # Optionally ignore raw data if too large or sensitive for repo
-.vscode/ # Common for VS Code users
-EOF
-
-echo ".gitignore created."
+data/raw/
+src/data/raw/
+.vscode/

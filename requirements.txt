@@ -1,5 +1,4 @@
-# Create the requirements.txt file
-cat <<EOF > requirements.txt
+
 python-dotenv
 telethon
 pandas
@@ -12,4 +11,4 @@ uvicorn
 Pillow
 opencv-python
 ultralytics
-EOF
+

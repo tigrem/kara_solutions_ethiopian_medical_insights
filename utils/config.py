@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv() # Load environment variables from .env file
 
-TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
-TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
+TELEGRAM_API_ID = os.getenv("27075129")
+TELEGRAM_API_HASH = os.getenv("e01cc115324f5d118b642778e1f9cfca")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
