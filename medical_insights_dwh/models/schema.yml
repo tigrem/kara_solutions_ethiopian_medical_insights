@@ -1,0 +1,165 @@
+# medical_insights_dwh/models/schema.yml
+version: 2
+
+sources:
+  - name: raw # This name is used in {{ source('raw', 'raw_telegram_messages') }}
+    database: neondb # CORRECTED: Hardcode the database name here
+    schema: public # The schema where 'raw_telegram_messages' table resides
+    tables:
+      - name: raw_telegram_messages
+        description: "Raw, unaltered data scraped from Telegram channels, stored as JSONB."
+        columns:
+          - name: id
+            description: "Internal primary key for the raw table (auto-generated)."
+          - name: message_data
+            description: "JSONB column containing the full raw message data from Telegram API."
+          - name: channel_name
+            description: "The name of the Telegram channel."
+          - name: scraped_date
+            description: "The calendar date when the message was scraped."
+          - name: ingestion_timestamp
+            description: "Timestamp when the record was ingested into the raw table."
+
+models:
+  - name: stg_telegram_messages
+    description: "Staging model for raw Telegram messages. Extracts and casts key fields from the JSONB blob for easier use in downstream models."
+    columns:
+      - name: message_pk # NEW: Unique primary key for the staging layer
+        description: "Surrogate key for the staging message, ensuring uniqueness per message within a channel, generated from message_id, channel_telegram_id, and scraped_date."
+        tests:
+          - unique
+          - not_null
+      - name: message_id
+        description: "Original identifier for the Telegram message (from Telegram API). Not necessarily unique across channels or re-scrapes without a composite key."
+        tests:
+          - not_null # message_id should still not be null
+      - name: message_timestamp
+        description: "Timestamp when the message was originally posted on Telegram."
+        tests:
+          - not_null
+      - name: message_content
+        description: "The text content of the Telegram message. Can be NULL if only media is present."
+        # OPTIONAL: Commented out this test as messages without content are expected
+        # tests:
+        #   - assert_message_has_content # Custom test for content validity
+      - name: message_views
+        description: "Number of views the message had at the time of scraping. Can be NULL if not available."
+      - name: channel_telegram_id
+        description: "Telegram's internal numeric ID for the channel the message belongs to."
+        tests:
+          - not_null
+      - name: channel_name
+        description: "Human-readable name of the Telegram channel."
+        tests:
+          - not_null
+      - name: has_media
+        description: "Boolean flag indicating whether the message contains any attached media."
+      - name: media_type
+        description: "Categorization of the attached media (e.g., 'photo', 'document_image', 'other_media'). NULL if no media."
+      - name: file_name
+        description: "Original filename of the attached media, if downloaded."
+      - name: file_path
+        description: "Local file path where the media was stored, if downloaded."
+      - name: scraped_date
+        description: "The date when this specific message record was scraped from Telegram."
+        tests:
+          - not_null
+      - name: ingestion_timestamp
+        description: "The exact timestamp when this record was ingested into the raw table."
+        tests:
+          - not_null
+
+  - name: dim_channels
+    description: "Dimension table containing unique Telegram channel information. Used to provide context for messages."
+    columns:
+      - name: channel_sk
+        description: "Surrogate key for the dim_channels table, serving as its primary key."
+        tests:
+          - unique
+          - not_null
+      - name: channel_telegram_id
+        description: "The natural key: Telegram's internal numeric ID for the channel."
+        tests:
+          - unique
+          - not_null
+      - name: channel_name
+        description: "The human-readable name of the Telegram channel."
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_dates
+    description: "Conformed dimension table for all date-related analysis. Provides various date attributes."
+    columns:
+      - name: date_key
+        description: "Surrogate key for the dim_dates table (YYYYMMDD integer), serving as its primary key."
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: "The full date in DATE format."
+        tests:
+          - not_null
+          - unique
+      - name: year
+        description: "The year of the date."
+      - name: month
+        description: "The month number (1-12) of the date."
+      - name: day
+        description: "The day of the month (1-31) of the date."
+      - name: day_of_week
+        description: "The day of the week (0=Sunday, 6=Saturday)."
+      - name: day_name
+        description: "The full name of the day of the week (e.g., 'Monday')."
+      - name: month_name
+        description: "The full name of the month (e.g., 'January')."
+      - name: quarter
+        description: "The quarter of the year (1-4)."
+      - name: week_of_year
+        description: "The week number of the year (1-53)."
+
+  - name: fct_messages
+    description: "Fact table for Telegram messages, optimized for analytical queries. Contains key metrics and foreign keys to dimension tables."
+    columns:
+      - name: message_pk
+        description: "Primary key for the fct_messages table, unique identifier for each message in the fact table."
+        tests:
+          - unique
+          - not_null
+      - name: message_id
+        description: "Original Telegram message ID, retained for traceability."
+        tests:
+          - not_null
+      - name: channel_fk
+        description: "Foreign key linking to the dim_channels table."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_channels')
+              field: channel_sk
+      - name: message_date_fk
+        description: "Foreign key linking to the dim_dates table for the message's original posting date."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: date_key
+              where: "message_date_fk != -1" # Added condition to ignore -1 for relationships test
+      - name: message_length
+        description: "Length of the message content in characters."
+      - name: has_image
+        description: "Boolean flag: TRUE if the message has an image attachment, FALSE otherwise."
+      - name: message_views
+        description: "Number of views the message had."
+      - name: message_scraped_date_fk
+        description: "Foreign key linking to the dim_dates table for the date the message was scraped."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: date_key
+              where: "message_scraped_date_fk != -1" # Added condition to ignore -1 for relationships test
+      - name: message_timestamp
+        description: "Original full timestamp of the message posting."
+      - name: message_content
+        description: "The full message content. Included here for convenience in analysis, but should be treated as an attribute."

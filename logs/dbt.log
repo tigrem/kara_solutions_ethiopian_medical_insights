@@ -1,0 +1,117 @@
+[0m10:09:18.535083 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002186594EA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000218637ACA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021867ABFD90>]}
+
+
+============================== 10:09:18.540752 | 866a57c2-adf4-46f8-8c9a-8cbe3cbe8633 ==============================
+[0m10:09:18.540752 [info ] [MainThread]: Running with dbt=1.10.4
+[0m10:09:18.541358 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'version_check': 'True', 'log_path': 'logs', 'profiles_dir': 'C:\\Users\\test\\.dbt', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'log_format': 'default', 'invocation_command': 'dbt init medical_insights_dwh', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m10:09:18.567226 [debug] [MainThread]: Starter project path: D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\include\starter_project
+[0m10:09:18.583342 [info ] [MainThread]: 
+Your new dbt project "medical_insights_dwh" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m10:09:18.583919 [info ] [MainThread]: Setting up your profile.
+[0m10:12:44.581756 [error] [MainThread]: Encountered an error:
+
+[0m10:12:44.595400 [error] [MainThread]: Traceback (most recent call last):
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\cli\requires.py", line 161, in wrapper
+    result, success = func(*args, **kwargs)
+                      ~~~~^^^^^^^^^^^^^^^^^
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\cli\requires.py", line 111, in wrapper
+    return func(*args, **kwargs)
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\cli\main.py", line 483, in init
+    results = task.run()
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\task\init.py", line 346, in run
+    self.setup_profile(profile_name)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\task\init.py", line 262, in setup_profile
+    self.create_profile_from_target(adapter, profile_name=profile_name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\task\init.py", line 179, in create_profile_from_target
+    self.create_profile_from_profile_template(profile_template, profile_name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\task\init.py", line 163, in create_profile_from_profile_template
+    target = self.generate_target_from_input(prompts, initial_target)
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\task\init.py", line 129, in generate_target_from_input
+    target[key] = click.prompt(
+                  ~~~~~~~~~~~~^
+        text, default=default, hide_input=hide_input, type=type
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\click\termui.py", line 168, in prompt
+    value = prompt_func(prompt)
+  File "D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\click\termui.py", line 151, in prompt_func
+    raise Abort() from None
+click.exceptions.Abort
+
+[0m10:12:44.600185 [debug] [MainThread]: Command `dbt init` failed at 10:12:44.599843 after 206.19 seconds
+[0m10:12:44.601903 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021867CCD480>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021867CC1B50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021867B57460>]}
+[0m10:12:44.602904 [debug] [MainThread]: Flushing usage events
+[0m10:12:45.767381 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:12:50.436367 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A66DEA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A454CA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A788FD90>]}
+
+
+============================== 10:12:50.440886 | 90c77a22-c45f-44d4-a476-4e673bc6ef76 ==============================
+[0m10:12:50.440886 [info ] [MainThread]: Running with dbt=1.10.4
+[0m10:12:50.441550 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\test\\.dbt', 'debug': 'False', 'version_check': 'True', 'log_path': 'logs', 'fail_fast': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'log_format': 'default', 'invocation_command': 'dbt init medical_insights_dwh', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m10:12:50.460844 [info ] [MainThread]: A project called medical_insights_dwh already exists here.
+[0m10:12:50.461909 [debug] [MainThread]: Command `dbt init` succeeded at 10:12:50.461802 after 0.15 seconds
+[0m10:12:50.462178 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A78AEB10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A7939FD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000262A76FAF10>]}
+[0m10:12:50.462454 [debug] [MainThread]: Flushing usage events
+[0m10:12:51.210204 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:13:14.083683 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280C87DEA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280C665CA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280C998FD90>]}
+
+
+============================== 10:13:14.086631 | 61d7a804-d4f2-4f63-9d41-13bb996de1ef ==============================
+[0m10:13:14.086631 [info ] [MainThread]: Running with dbt=1.10.4
+[0m10:13:14.087272 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\test\\.dbt', 'debug': 'False', 'fail_fast': 'False', 'log_path': 'logs', 'warn_error': 'None', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'log_format': 'default', 'introspect': 'True', 'target_path': 'None', 'invocation_command': 'dbt init medical_insights_dwh', 'send_anonymous_usage_stats': 'True'}
+[0m10:13:14.099112 [debug] [MainThread]: Starter project path: D:\10academy\week7\kara_solutions_ethiopian_medical_insights\venv\Lib\site-packages\dbt\include\starter_project
+[0m10:13:14.109787 [info ] [MainThread]: 
+Your new dbt project "medical_insights_dwh" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m10:13:14.110526 [info ] [MainThread]: Setting up your profile.
+[0m10:14:30.632488 [info ] [MainThread]: Profile medical_insights_dwh written to C:\Users\test\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m10:14:30.633924 [debug] [MainThread]: Command `dbt init` succeeded at 10:14:30.633769 after 76.67 seconds
+[0m10:14:30.634328 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280CAB99220>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280CAB8DA30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000280C97FBAC0>]}
+[0m10:14:30.634731 [debug] [MainThread]: Flushing usage events
+[0m10:14:31.456385 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m16:31:59.796677 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615DB9EA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615BA0CA50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615FD1FED0>]}
+
+
+============================== 16:31:59.801833 | e7c34d67-4b27-4f20-b267-74b338079b83 ==============================
+[0m16:31:59.801833 [info ] [MainThread]: Running with dbt=1.10.4
+[0m16:31:59.803028 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\test\\.dbt', 'fail_fast': 'False', 'warn_error': 'None', 'log_path': 'logs', 'debug': 'False', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'introspect': 'True', 'log_format': 'default', 'target_path': 'None', 'invocation_command': 'dbt docs generate', 'send_anonymous_usage_stats': 'True'}
+[0m16:31:59.803510 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path D:\10academy\week7\kara_solutions_ethiopian_medical_insights\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m16:31:59.804549 [debug] [MainThread]: Command `dbt docs generate` failed at 16:31:59.804439 after 0.14 seconds
+[0m16:31:59.804835 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615FD45940>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615EC59FD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002615EBBB570>]}
+[0m16:31:59.805136 [debug] [MainThread]: Flushing usage events
+[0m16:32:00.572762 [debug] [MainThread]: An error was encountered while trying to flush usage events
