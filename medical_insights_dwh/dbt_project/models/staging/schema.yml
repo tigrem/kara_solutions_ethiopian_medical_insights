@@ -1,0 +1,24 @@
+# Example: models/schema.yml or models/staging/schema.yml
+version: 2
+
+sources:
+  - name: raw # This is the source "name" (e.g., 'raw' or 'telegram_data')
+    database: "{{ env_var('POSTGRES_DB') }}" # Or your actual database name
+    schema: public # This is the actual schema in your Postgres DB where raw_telegram_messages lives
+
+    tables:
+      - name: raw_telegram_messages # This is the 'name' of the table within the source
+        # Optionally, if the table in the DB is named differently, use 'identifier':
+        # identifier: actual_table_name_in_db
+        description: "Raw messages scraped from Telegram channels."
+        columns:
+          - name: message_id
+            description: "Primary key of the raw message."
+            tests:
+              - unique
+              - not_null
+          # Add other columns from your raw_telegram_messages table
+          - name: channel_name
+          - name: message_text
+          - name: message_timestamp
+          # etc.
