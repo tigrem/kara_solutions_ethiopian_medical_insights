@@ -1,24 +1,120 @@
-# Example: models/schema.yml or models/staging/schema.yml
+# medical_insights_dwh/dbt_project/models/staging/schema.yml
 version: 2
 
-sources:
-  - name: raw # This is the source "name" (e.g., 'raw' or 'telegram_data')
-    database: "{{ env_var('POSTGRES_DB') }}" # Or your actual database name
-    schema: public # This is the actual schema in your Postgres DB where raw_telegram_messages lives
+models:
+  - name: stg_telegram_messages
+    description: "Staged Telegram messages with parsed JSON data, ready for downstream use."
+    columns:
+      - name: message_id
+        description: "Unique identifier for the message, extracted from 'message_data.id'."
+        tests:
+          # - unique # COMMENT OUT OR REMOVE THIS LINE
+          - not_null # Keep this test
+      - name: telegram_channel_id
+        description: "ID of the Telegram channel, extracted from 'message_data.channel_id'."
+        tests:
+          - not_null # Channel ID should always be present
+      - name: message_text
+        description: "The main text content of the Telegram message."
+      - name: message_timestamp
+        description: "Timestamp when the message was originally sent, extracted from 'message_data.date'."
+        tests:
+          - not_null # Message timestamp should always be present
+      - name: views_count
+        description: "Number of views the message has received, extracted from 'message_data.views'."
+      - name: media_type
+        description: "Type of media attached to the message (e.g., 'photo', 'video', 'document_image')."
+      - name: file_name
+        description: "Name of the attached file, if any, extracted from 'message_data.file_name'."
+      - name: file_path
+        description: "Path to the attached file, if any, extracted from 'message_data.file_path'."
+      - name: has_media
+        description: "Boolean indicating if the message contains any media, extracted from 'message_data.has_media'."
+      - name: channel_name
+        description: "Name of the Telegram channel, extracted from 'message_data.channel_name'."
+        tests:
+          - not_null # Channel name should always be present
+      - name: scraped_date
+        description: "The date when this message record was originally scraped."
+        tests:
+          - not_null # Scraped date should always be present
+      - name: ingestion_timestamp
+        description: "The timestamp when this record was ingested into the raw layer."
+        tests:
+          - not_null # Ingestion timestamp should always be present
+
+sources: # This section defines your raw data sources as they exist in your DB
+  - name: raw # This is the logical source name (used in source('raw', ...))
+    database: "{{ env_var('POSTGRES_DB') }}"
+    schema: public # This is the actual schema in your Postgres DB (e.g., raw, public)
 
     tables:
-      - name: raw_telegram_messages # This is the 'name' of the table within the source
-        # Optionally, if the table in the DB is named differently, use 'identifier':
-        # identifier: actual_table_name_in_db
-        description: "Raw messages scraped from Telegram channels."
+      - name: raw_telegram_messages
+        description: "Raw messages scraped from Telegram channels, stored as a JSON blob."
         columns:
-          - name: message_id
-            description: "Primary key of the raw message."
+          # The following columns are *extracted from message_data* in stg_telegram_messages.
+          # They are NOT top-level columns in the raw_telegram_messages table itself.
+          # Therefore, they should NOT be defined here with tests.
+          # - name: message_id
+          #   description: "Primary key of the raw message (extracted from JSON)."
+          #   tests:
+          #     - unique
+          #     - not_null
+          # - name: date # This is inside message_data JSON
+          #   data_type: TIMESTAMP WITH TIME ZONE
+          # - name: views # This is inside message_data JSON
+          #   data_type: INTEGER
+          # - name: message # This is inside message_data JSON
+          #   data_type: TEXT
+          # - name: file_name # This is inside message_data JSON
+          #   data_type: VARCHAR
+          # - name: file_path # This is inside message_data JSON
+          #   data_type: TEXT
+          # - name: has_media # This is inside message_data JSON
+          #   data_type: BOOLEAN
+          # - name: channel_id # This is inside message_data JSON
+          #   data_type: BIGINT
+          # - name: media_type # This is inside message_data JSON
+          #   data_type: VARCHAR
+          # - name: channel_name # This is inside message_data JSON
+          #   data_type: VARCHAR
+
+          - name: message_data # This is the actual top-level column holding the JSON blob
+            description: "Raw JSON data of the Telegram message."
+            data_type: JSONB # Assuming it's stored as JSONB in Postgres for efficiency
             tests:
-              - unique
+              - not_null # The raw JSON blob should not be null
+
+          - name: scraped_date # This is a top-level column in the raw table
+            data_type: DATE
+            description: "The date when this raw message record was scraped."
+            tests:
               - not_null
-          # Add other columns from your raw_telegram_messages table
-          - name: channel_name
-          - name: message_text
-          - name: message_timestamp
-          # etc.
+
+          - name: ingestion_timestamp # This is a top-level column in the raw table
+            data_type: TIMESTAMP WITH TIME ZONE
+            description: "The timestamp when this raw record was inserted into the database."
+            tests:
+              - not_null
+
+      - name: yolo_detections_csv
+        identifier: yolo_detections_csv # <-- This maps to the table name 'yolo_detections_csv'
+        external:
+          location: "{{ var('yolo_detections_csv_path') }}" # Path to your external CSV file
+          columns:
+            - name: message_id
+              data_type: VARCHAR
+              tests:
+                - not_null
+            - name: detected_object_class
+              data_type: VARCHAR
+              tests:
+                - not_null
+            - name: confidence_score
+              data_type: NUMERIC
+              tests:
+                - not_null
+            - name: detection_timestamp
+              data_type: TIMESTAMP
+              tests:
+                - not_null
