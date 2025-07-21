@@ -1,4 +1,4 @@
 
 target/
-dbt_packages/
+dbt_project/dbt_packages/
 logs/

@@ -1,9 +1,10 @@
-name: 'medical_insights_dwh' # This should match the name of your dbt project folder
+# medical_insights_dwh/dbt_project/dbt_project.yml
+name: 'dbt_project'
 version: '1.0.0'
 config-version: 2
+profile: 'medical_insights' # <--- THIS LINE IS CRUCIAL AND MUST BE PRESENT
 
-profile: 'medical_insights_dwh' # This must match the profile name in ~/.dbt/profiles.yml
-
+# Rest of your dbt_project.yml content follows below...
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -11,17 +12,10 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target"
-clean-targets:
+clean-targets:         # directories to clean when `dbt clean` is run
   - "target"
   - "dbt_packages"
-  - "dbt_modules"
 
-models:
-  medical_insights_dwh: # This is your project name again
-    staging:
-      +materialized: view # Staging models are usually views
-      +schema: raw # Create models in a 'raw' schema for staging
-    marts:
-      +materialized: table # Marts are often tables for performance
-      +schema: public # Or your analytical schema like 'analytics'
+# ... (rest of the file, including your vars section) ...
+vars:
+  yolo_detections_csv_path: 'D:/10academy/week7/kara_solutions_ethiopian_medical_insights/data/processed/yolo_detections.csv' # <-- This is what I need to see
