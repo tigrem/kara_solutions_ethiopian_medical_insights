@@ -53,7 +53,6 @@ class FctImageDetection(Base):
     # Assuming message_id + detected_object_class + detection_timestamp is unique for simplicity
     # If your dbt model has a primary key defined, use that.
     detection_id = Column(String, primary_key=True, index=True) # Assuming dbt generated a unique ID
-
     message_id = Column(String) # Foreign key to fct_messages.message_id
     detected_object_class = Column(String)
     confidence_score = Column(Numeric)
